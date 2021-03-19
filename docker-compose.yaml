@@ -1,0 +1,32 @@
+version: '2.2'
+services:
+ # Nginx server configuration   
+  pflanzastic-fe:
+    image: nginx:1.19-alpine
+    container_name: pflanzastic-fe_nginx
+    networks:
+      app-network:
+    # depends_on:
+    #   - docker-mysql
+    volumes:
+      - ./public:/var/www/public
+      - ./docker/container/config/nginx:/etc/nginx/conf.d/
+    ports:
+      - "9000:80"
+
+#  # Mysql configuration
+#   docker-mysql:
+#     extends:
+#       file: ./docker/compose/mysql.docker-compose.yaml
+#       service: db-mysql
+#     container_name: web-dev_nginx-mysql
+#     networks:
+#       app-network:
+#         aliases:
+#           - db
+#     restart: always
+#     volumes:
+#         - ./data/docker/volumes/nginx-mysql:/var/lib/mysql
+
+networks:
+    app-network:
