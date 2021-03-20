@@ -1,7 +1,7 @@
 # Pflanzastic
 
-Pflanzastic is a collection of trials and errors on the way of learning Elm, Go and gRPC.
+Pflanzastic is an exploratory project while learning Elm, Go, gRPC and others.
 
-To run Pflanzastic you need a BE (server) and some FE (client).
+To run Pflanzastic you need a BE app (server) and some sort of FE app (client).
 
 Check individual apps for features
