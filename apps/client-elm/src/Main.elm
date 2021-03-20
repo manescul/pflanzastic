@@ -1,4 +1,4 @@
-module Pflanzastic exposing (..)
+module Main exposing (..)
 
 import Browser exposing (Document, UrlRequest)
 import Browser.Navigation exposing (Key)
