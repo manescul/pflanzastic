@@ -1,5 +1,5 @@
 up: fe-build
-	docker-compose up -d
+	docker-compose up -d 
 
 fe-build:
 	elm make src/fe/Pflanzastic.elm --output=public/assets/elm.js
