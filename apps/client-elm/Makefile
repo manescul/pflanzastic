@@ -1,29 +1,49 @@
-install: install-elm-builder
+UID := $(shell id -u)
+UNAME := $(shell id -un)
+GID := $(shell id -g)
 
+# Common targets
+prune: prune-images
+
+prune-images:
+	  docker image ls --filter "dangling=true" --quiet | xargs docker image rm \
+	 && 
+
+install: install-elm-builder
 install-elm-builder:
 	docker build \
-		--target prod-elm-builder \
-		--tag elm-builder \
-		--build-arg uname=${id -un} \
-		--build-arg uid=${id -u} \
+		--target pflanzastic-prod-elm-builder \
+		--tag pflanzastic-prod-elm-builder \
+		--build-arg uid=$(UID) \
+		--build-arg uname=$(UNAME) \
+		--build-arg gid=$(GID) \
+		--build-arg gname=$(GNAME) \
 		.
-
-dev-install-elm-builder:
-	docker build \
-		--target dev-elm-builder \ 
-		--tag dev-elm-builder \
-		--build-arg uname=${id -un} \
-		--build-arg uid=${id -u} \
-		.
-
 build:
 	docker run \
 		--rm \
-		--name elm-builder \
-		--mount type=bind,source=`pwd`,target=/tmp/pflanzastic \
-		--workdir /tmp/pflanzastic \
-		elm-builder \
-		elm make src/Main.elm --output=public/assets/elm.js
+		--name pflanzastic-prod-elm-builder \
+		--mount type=bind,source=`pwd`,target=/tmp/code \
+		--workdir /tmp/code \
+		pflanzastic-prod-elm-builder \
+		elm make src/Main.elm --output=./public/assets/elm.js
+
+
+###################
+# DEV environment #
+###################
+
+dev-install: dev-install-elm-builder
+
+dev-install-elm-builder:
+	docker build \
+		--target pflanzastic-dev-elm-builder \ 
+		--tag pflanzastic-dev-elm-builder \
+		--build-arg uid=$(UID) \
+		--build-arg uname=$(UNAME) \
+		--build-arg gid=$(GID) \
+		--build-arg gname=$(GNAME) \
+		.
 
 up:
 	docker-compose --file docker/docker-compose.yaml up -d 

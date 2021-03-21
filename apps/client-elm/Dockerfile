@@ -1,11 +1,16 @@
 # PRODUCTION alm code builder
-FROM alpine as prod-elm-builder
+FROM alpine as pflanzastic-prod-elm-builder
 
-ARG uname
 ARG uid
+ARG uname
+ARG gid
+ARG gname
 
-ENV ugname ${uname:-hector}
-ENV ugid ${uid:-1000}
+ENV uid ${uid:-1000}
+ENV uname ${uname:-hector}
+ENV gid ${gid:-1000}
+ENV gname ${gname:-hector}
+ENV homedir /home/${uname}
 
 RUN apk --no-cache add shadow curl
 
@@ -14,31 +19,29 @@ RUN  curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/
     && chmod +x elm \
     && mv elm /usr/local/bin/
 
-RUN addgroup -g ${ugid} ${ugname} \
-    && adduser -u ${ugid} -G ${ugname} -HD ${ugname} \
-    && usermod -a -G root ${ugname}
+RUN addgroup -g ${gid} ${gname} \
+    && adduser -u ${uid} -g ${gid} -H -D ${uname} \
+    && usermod -a -G root ${uname}
 
-USER ${ugname}
+USER ${uname}
 
 # DEVELOPMENT Continuous builder that watches the elm files changes 
 # and recompiles the elm.js file
 
-FROM alpine as dev-elm-builder
+FROM alpine as pflanzastic-dev-elm-builder
 
-ARG uname
 ARG uid
+ARG uname
+ARG gid
+ARG gname
 
-ENV ugname ${uname:-hector}
-ENV ugid ${uid:-1000}
-ENV homedir /home/${ugname}
+ENV uid ${uid:-1000}
+ENV uname ${uname:-hector}
+ENV gid ${gid:-1000}
+ENV gname ${gname:-hector}
+ENV homedir /home/${uname}
 
 RUN apk --no-cache add shadow curl npm
-
-RUN addgroup -g ${ugid} ${ugname} \
-    && adduser -u ${ugid} -h ${homedir} -G ${ugname} -D ${ugname} \
-    && usermod -a -G www-data,root ${ugname} \
-    && mkdir -p ${homedir} \
-    && chown -R ${ugname}:${ugname} ${homedir}
 
 # ELM install
 RUN  curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/binary-for-linux-64-bit.gz \
@@ -49,5 +52,9 @@ RUN  curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/
 # Chokidar file watcher
 RUN npm install chokidar-cli -g --save-dev
 
+RUN addgroup -g ${gid} ${gname} \
+    && adduser -u ${uid} -H -G ${gname} -D ${uname} \
+    && usermod -a -G www-data,root ${uname}
+
 # Default user
-USER ${ugname}
+USER ${uname}
