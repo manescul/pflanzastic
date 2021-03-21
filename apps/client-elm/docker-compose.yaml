@@ -2,13 +2,14 @@ version: '2.2'
 services:
  # Nginx server configuration   
   pflanzastic-client-elm:
-    image: nginx:1.19-alpine
+    image: pflanzastic-client-elm
     container_name: pflanzastic-client-elm
     networks:
       pflanzastic-network:
     volumes:
-      - ../public:/var/www/public
-      - ./container/config/nginx:/etc/nginx/conf.d/
+      - ./public:/var/www/public
+      - ./docker/container/config/nginx:/etc/nginx/conf.d/
+    working_dir: /var/www/public
     ports:
       - "9000:80"
 

@@ -31,7 +31,7 @@ view : Model -> Document Msg
 view model =
     { title = "Pflanzastic"
     , body =
-        [ Html.p [] [ Html.text "Pflanzastic JA JA JA" ]
+        [ Html.p [] [ Html.text "Pflanzastic N AA IN" ]
         ]
     }
 

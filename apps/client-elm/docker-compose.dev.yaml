@@ -1,0 +1,14 @@
+version: '2.2'
+services:
+ # Nginx server configuration   
+  pflanzastic-dev-elm-builder:
+    image: pflanzastic-dev-elm-builder
+    container_name: pflanzastic-dev-elm-builder
+    networks:
+      pflanzastic-network:
+    volumes:
+      - ./:/tmp/code/
+    working_dir: /tmp/code
+    command: npm run watch
+networks:
+    pflanzastic-network:

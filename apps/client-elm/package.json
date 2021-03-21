@@ -1,5 +1,5 @@
 {
     "scripts": {
-        "watch": "chokidar '**/*.elm' -c 'elm make /tmp/code/src/Main.elm --output /tmp/code/public/assets/elm.js' --initial"
+        "watch": "SHELL=/bin/sh chokidar '**/*.elm' -c 'elm make ./src/Main.elm --output ./public/assets/elm.js' --initial"
       }
 }
