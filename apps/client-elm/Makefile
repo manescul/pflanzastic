@@ -1,21 +1,40 @@
-install: container-elm-builder
+install: install-elm-builder
 
-container-elm-builder:
-	docker build --tag elm-builder --file docker/elm-builder.Dockerfile .
+install-elm-builder:
+	docker build \
+		--target prod-elm-builder \
+		--tag elm-builder \
+		--build-arg uname=${id -un} \
+		--build-arg uid=${id -u} \
+		.
 
-up:
-	docker-compose --file docker/docker-compose.yaml up -d 
+dev-install-elm-builder:
+	docker build \
+		--target dev-elm-builder \ 
+		--tag dev-elm-builder \
+		--build-arg uname=${id -un} \
+		--build-arg uid=${id -u} \
+		.
 
 build:
 	docker run \
 		--rm \
 		--name elm-builder \
-		--mount type=bind,source=`pwd`,target=/tmp/code \
-		--workdir /tmp/code \
+		--mount type=bind,source=`pwd`,target=/tmp/pflanzastic \
+		--workdir /tmp/pflanzastic \
 		elm-builder \
 		elm make src/Main.elm --output=public/assets/elm.js
 
+up:
+	docker-compose --file docker/docker-compose.yaml up -d 
+
 down:
 	docker-compose --file docker/docker-compose.yaml down
+
+dev-up:
+	docker-compose --file docker/docker-compose.dev.yaml up -d 
+
+dev-down:
+	docker-compose --file docker/docker-compose.dev.yaml down
 
 reset: down up
