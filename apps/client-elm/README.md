@@ -6,4 +6,4 @@ Run:
 **make up** - to start the nginx server that serves the Elm app
 
 Open :
-**http://localhost:9000** - to access the app
+**http://localhost:9090** - to access the app
