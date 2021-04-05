@@ -22,7 +22,7 @@ RUN  curl -L -o elm.gz https://github.com/elm/compiler/releases/download/0.19.1/
     && mv elm /usr/local/bin/
 
 RUN groupadd -g ${gid} ${gname}
-RUN cat /etc/passwd
+# RUN cat /etc/passwd
 RUN useradd -u ${uid} -g ${gid} -M ${uname}
 RUN usermod -a -G root ${uname}
 
